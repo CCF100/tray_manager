@@ -120,7 +120,10 @@ static FlMethodResponse* set_icon(TrayManagerPlugin* self, FlValue* args) {
     menu = gtk_menu_new();
 
   if (!indicator) {
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     indicator = app_indicator_new_with_path(id, icon_path, APP_INDICATOR_CATEGORY_APPLICATION_STATUS, NULL);
+    #pragma GCC diagnostic pop
     app_indicator_set_menu(indicator, GTK_MENU(menu));
     gtk_widget_show_all(menu);
   }
