@@ -120,8 +120,7 @@ static FlMethodResponse* set_icon(TrayManagerPlugin* self, FlValue* args) {
     menu = gtk_menu_new();
 
   if (!indicator) {
-    app_indicator_set_status(indicator,
-                             APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
+    indicator = app_indicator_new_with_path(id, icon_path, APP_INDICATOR_CATEGORY_APPLICATION_STATUS, NULL);
     app_indicator_set_menu(indicator, GTK_MENU(menu));
     gtk_widget_show_all(menu);
   }
