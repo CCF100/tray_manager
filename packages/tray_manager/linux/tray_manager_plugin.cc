@@ -101,8 +101,7 @@ GtkWidget* _create_menu(FlValue* args) {
 static FlMethodResponse* destroy(TrayManagerPlugin* self, FlValue* args) {
   if (indicator) {
     g_object_unref(indicator);
-    return FL_METHOD_RESPONSE(
-      fl_method_success_response_new(fl_value_new_bool(true)));
+    app_indicator_set_status(indicator, APP_INDICATOR_STATUS_PASSIVE);
   }
   return FL_METHOD_RESPONSE(
       fl_method_success_response_new(fl_value_new_bool(true)));
