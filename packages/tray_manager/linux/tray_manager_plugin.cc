@@ -100,25 +100,30 @@ GtkWidget* _create_menu(FlValue* args) {
 
 static FlMethodResponse* destroy(TrayManagerPlugin* self, FlValue* args) {
   if (indicator) {
-    indicator = app_indicator_set_status(indicator, APP_INDICATOR_STATUS_PASSIVE);
-    g_object_unref(indicator);
+    app_indicator_set_status(indicator,
+                             APP_INDICATOR_STATUS_PASSIVE);
 
+    g_object_unref(indicator);
+    indicator = nullptr;
   }
+
   return FL_METHOD_RESPONSE(
-      fl_method_success_response_new(fl_value_new_bool(true)));
+    fl_method_success_response_new(fl_value_new_bool(true)));
 }
 
 static FlMethodResponse* set_icon(TrayManagerPlugin* self, FlValue* args) {
   const char* id = fl_value_get_string(fl_value_lookup_string(args, "id"));
   const char* icon_path =
-      fl_value_get_string(fl_value_lookup_string(args, "iconPath"));
+  fl_value_get_string(fl_value_lookup_string(args, "iconPath"));
 
   if (!menu)
     menu = gtk_menu_new();
 
   if (!indicator) {
-    indicator = app_indicator_set_status(id, icon_path,
-                                  APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
+    indicator = app_indicator_new(
+      id,
+      icon_path,
+      APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
 
     app_indicator_set_menu(indicator, GTK_MENU(menu));
     gtk_widget_show_all(menu);
@@ -128,7 +133,7 @@ static FlMethodResponse* set_icon(TrayManagerPlugin* self, FlValue* args) {
   app_indicator_set_icon_full(indicator, icon_path, "");
 
   return FL_METHOD_RESPONSE(
-      fl_method_success_response_new(fl_value_new_bool(true)));
+    fl_method_success_response_new(fl_value_new_bool(true)));
 }
 
 static FlMethodResponse* set_title(TrayManagerPlugin* self, FlValue* args) {
